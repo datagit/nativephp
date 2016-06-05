@@ -6,7 +6,7 @@
  * Time: 18:04
  */
 
-namespace NativePhp\Test;
+namespace NativePhp\Tests;
 
 
 //https://phpunit.de/getting-started.html
@@ -17,7 +17,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testCalculator() {
         $cal = new Calculator();
-        $this->assertEquals(4, $cal->add(1, 2));
+        $this->assertEquals(3, $cal->add(1, 2));
         //phpunit --bootstrap src/autoload.php tests/MoneyTest
     }
 }

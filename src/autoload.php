@@ -7,20 +7,17 @@
  */
 
 namespace NativePhp;
+use NativePhp\Utility\Core;
+
 $rootPath = dirname(__DIR__);
 require_once $rootPath . '/vendor/autoload.php';
+require_once $rootPath . '/src/Utility/Core.php';
 
 try {
-    spl_autoload_register(function ($class_name) {
-        $names = explode('\\', $class_name);
-        $file = dirname(__DIR__) . '/src/Utility/' . $names[count($names) - 1] . '.php';
-        if (is_file($file)) {
-            include_once $file;
-        }
-
-    });
+    Core::setRootPath($rootPath);
+    Core::init();
 } catch (\Exception $e2) {
-    printf("Unable to parse the YAML string: %s", $e2->getMessage());
+    printf("Unable to load class: %s", $e2->getMessage());
     die;
 }
 

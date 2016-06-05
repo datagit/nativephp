@@ -14,6 +14,9 @@ use Symfony\Component\Yaml\Yaml;
 class Core
 {
     public static $rootPath = null;
+    public static $config = null;
+    public static $service = null;
+
     public static function setRootPath($path) {
         Core::$rootPath = $path;
     }
@@ -21,14 +24,17 @@ class Core
     public static function init() {
         Core::autoLoadClass();
         Core::loadConfig();
+    }
 
+    public static function loadService() {
+        self::$service = new Service();
+        return self::$service;
     }
 
     public static function loadConfig() {
         //load configs
         try {
-            global $globalConfigs;
-            $globalConfigs = Yaml::parse(file_get_contents(Core::$rootPath . '/config/config.yml'));
+            Core::$config = Yaml::parse(file_get_contents(Core::$rootPath . '/config/config.yml'));
         } catch (ParseException $e) {
             printf("Unable to parse the YAML string: %s", $e->getMessage());
             die;
@@ -40,14 +46,31 @@ class Core
         try {
             spl_autoload_register(function ($class_name) {
                 $names = explode('\\', $class_name);
-                $file = Core::$rootPath . '/src/Utility/' . $names[count($names) - 1] . '.php';
-                if (is_file($file)) {
-                    include $file;
+                $filesInUtility = Core::$rootPath . '/src/Utility/' . $names[count($names) - 1] . '.php';
+                if (is_file($filesInUtility)) {
+                    include_once $filesInUtility;
+                }
+                $filesInService = Core::$rootPath . '/src/Service/' . $names[count($names) - 1] . '.php';
+                if (is_file($filesInService)) {
+                    include_once $filesInService;
+                }
+                $filesInTest = Core::$rootPath . '/tests/' . $names[count($names) - 1] . '.php';
+                if (is_file($filesInTest)) {
+                    include_once $filesInTest;
                 }
             });
         } catch (\Exception $e2) {
-            printf("Unable to parse the YAML string: %s", $e2->getMessage());
+            printf("Unable to load file: %s", $e2->getMessage());
             die;
         }
+    }
+
+    public static function getParameters() {
+        return Core::$config['parameters'];
+    }
+
+    public static function getParameterByKey($key)
+    {
+        return Core::getParameters()[$key];
     }
 }

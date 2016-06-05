@@ -9,12 +9,17 @@
 namespace NativePhp\Utility;
 
 
-class Mailer
+class MailerWorker
 {
     private $transport;
 
     public function __construct($transport)
     {
         $this->transport = $transport;
+    }
+
+    public function send() {
+        echo "sending email...\n";
+        return true;
     }
 }

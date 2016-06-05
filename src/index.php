@@ -11,17 +11,14 @@ require_once $rootPath . '/vendor/autoload.php';
 require_once $rootPath . '/src/Utility/Core.php';
 
 use NativePhp\Utility\Core;
-use NativePhp\Utility\NewLetterMail;
 
-//global variable
-$globalConfigs = array();
 Core::setRootPath($rootPath);
 Core::init();
 
-$mail = new NewLetterMail();
-$mail->test();
+$service = Core::loadService();
 
-var_dump($mail);
+//var_dump($service->get('mailer'));
+$service->get('mailer')->send();
 
 
 

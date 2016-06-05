@@ -11,30 +11,33 @@ namespace NativePhp\Utility;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-class NewLetterMail
+class NewLetterMailerService
 {
     private $mailer = null;
     private $logger = null;
 
     public function __construct()
     {
-        global $globalConfigs;
-        $this->setMailer($globalConfigs['parameters']['mailer_transport']);
+        $this->setMailer(Core::getParameterByKey('mailer_transport'));
         $this->setLogger();
     }
 
-    public function test() {
-        $this->logger->warning('Foo');
-        $this->logger->error('Bar');
+    public function send() {
+        if ($this->mailer->send()) {
+            $this->logger->warning('sent successful');
+            return true;
+        }
+        $this->logger->error('send error');
+        return false;
+
     }
         
     public function setMailer($transport) {
-        $this->mailer = new Mailer($transport);
+        $this->mailer = new MailerWorker($transport);
     }
 
     public function setLogger() {
-        global $globalConfigs;
-        $path = Core::$rootPath . '/' . $globalConfigs['parameters']['path_log'];
+        $path = Core::$rootPath . '/' . Core::getParameterByKey('path_log');
         // create a log channel
         $log = new Logger('name');
         $log->pushHandler(new StreamHandler($path . '/your.log', Logger::WARNING));
