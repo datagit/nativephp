@@ -40,7 +40,10 @@ class Core
         try {
             spl_autoload_register(function ($class_name) {
                 $names = explode('\\', $class_name);
-                include Core::$rootPath . '/src/Utility/' . $names[count($names) - 1] . '.php';
+                $file = Core::$rootPath . '/src/Utility/' . $names[count($names) - 1] . '.php';
+                if (is_file($file)) {
+                    include $file;
+                }
             });
         } catch (\Exception $e2) {
             printf("Unable to parse the YAML string: %s", $e2->getMessage());

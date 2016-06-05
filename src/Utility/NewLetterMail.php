@@ -27,7 +27,7 @@ class NewLetterMail
         $this->logger->warning('Foo');
         $this->logger->error('Bar');
     }
-
+        
     public function setMailer($transport) {
         $this->mailer = new Mailer($transport);
     }
