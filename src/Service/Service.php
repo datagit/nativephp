@@ -19,7 +19,8 @@ class Service
     }
 
     private function defineServices() {
-        $this->services['mailer'] = new NewLetterMailerService();
+        //alias function name
+        $this->services['newlettermailer'] = new NewLetterMailerService();
         return $this;
     }
 

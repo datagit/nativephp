@@ -18,7 +18,7 @@ Core::init();
 $service = Core::loadService();
 
 //var_dump($service->get('mailer'));
-$service->get('mailer')->send();
+$service->get('newlettermailer')->send();
 
 
 

@@ -15,7 +15,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 {
     public function testMailer() {
         $services = Core::loadService();
-        $this->assertEquals(true, $services->get('mailer')->send());
+        $this->assertEquals(true, $services->get('newlettermailer')->send());
     }
 
 }
